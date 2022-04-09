@@ -11,9 +11,9 @@ class DaggerPlugin : Plugin<Project> {
         target.dependencies {
 
             add("implementation", Dependencies.Dagger.dagger)
-            add("implementation", Dependencies.Dagger.dagger_android)
-            add("kapt", Dependencies.Dagger.dagger_android_processor)
-            add("kapt", Dependencies.Dagger.dagger_compiler)
+            add("implementation", Dependencies.Dagger.daggerAndroid)
+            add("kapt", Dependencies.Dagger.daggerAndroidProcessor)
+            add("kapt", Dependencies.Dagger.daggerCompiler)
         }
     }
 }
