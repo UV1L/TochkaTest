@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main">
+
+    <fragment android:id="@+id/auth_fragment"
+        android:name="anton.android.tochkatest.ui.AuthFragment">
+
+        <action android:id="@+id/auth_fragment_to_home_fragment"
+            app:destination="@id/home_fragment"
+            app:popUpTo="@id/auth_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment android:id="@+id/home_fragment"
+        android:name="anton.android.tochkatest.ui.HomeScreenFragment" />
+</navigation>

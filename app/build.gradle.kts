@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -32,11 +33,19 @@ android {
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     // DI module
     implementation(project(":di"))
+
+    // Navigation
+    implementation(Dependencies.Navigation.navigationFragment)
+    implementation(Dependencies.Navigation.navigationUi)
+    androidTestImplementation(Dependencies.Navigation.navigationTest)
 
     implementation(Dependencies.Android.appCompat)
     testImplementation(Dependencies.Test.junit)

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TochkaTest</string>
+    <string name="loading_message">Загружаемся</string>
+    <string name="login_extra">KEY_LOGIN_EXTRA</string>
 </resources>
