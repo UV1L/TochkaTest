@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,6 +42,9 @@ android {
 dependencies {
     // DI module
     implementation(project(":di"))
+
+    // FirebaseUI
+    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
 
     // Navigation
     implementation(Dependencies.Navigation.navigationFragment)

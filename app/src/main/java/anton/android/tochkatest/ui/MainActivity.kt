@@ -7,8 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import anton.android.tochkatest.R
 
 class MainActivity : AppCompatActivity() {
-    
-    private val keyExtra = getString(R.string.login_extra)
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +19,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostFragmentContainer) as NavHostFragment
         val inflater = navHostFragment.navController.navInflater
         val graph = inflater.inflate(R.navigation.nav_graph_main)
+        val keyExtra = getString(R.string.login_extra)
         if (intent.hasExtra(keyExtra)) {
             when (intent.getBooleanExtra(keyExtra, false)) {
 

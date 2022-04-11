@@ -2,4 +2,7 @@
     <string name="app_name">TochkaTest</string>
     <string name="loading_message">Загружаемся</string>
     <string name="login_extra">KEY_LOGIN_EXTRA</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="sign_in_string">Sign in</string>
 </resources>

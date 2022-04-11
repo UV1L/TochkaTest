@@ -4,9 +4,7 @@
     <item android:id="@+id/splashBackground"
         android:drawable="?colorPrimary" />
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_launcher"/>
-    </item>
+    <item android:id="@+id/splashIcon"
+        android:drawable="@drawable/ic_launcher"
+        android:gravity="center"/>
 </layer-list>

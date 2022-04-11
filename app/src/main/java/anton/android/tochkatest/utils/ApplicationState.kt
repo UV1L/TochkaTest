@@ -1,8 +1,10 @@
 package anton.android.tochkatest.utils
 
+import com.google.firebase.auth.FirebaseUser
+
 object ApplicationState {
 
-    var authorized: Boolean = false
+    var currentUser: FirebaseUser? = null
 
     lateinit var username: String
 }
