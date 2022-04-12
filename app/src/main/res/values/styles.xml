@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="H1TextTheme" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">40sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="BodyTextTheme" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">22sp</item>
+        <item name="fontFamily">@font/lato_light</item>
+    </style>
+
+    <style name="SmallTextTheme" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/lato_light</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+</resources>

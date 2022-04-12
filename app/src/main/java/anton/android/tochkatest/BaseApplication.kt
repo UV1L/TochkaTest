@@ -5,6 +5,7 @@ import anton.android.di.ApplicationComponent
 import anton.android.di.DaggerApplicationComponent
 import anton.android.tochkatest.utils.ApplicationState
 import com.firebase.ui.auth.AuthUI
+import timber.log.Timber
 
 class BaseApplication : Application() {
 
@@ -16,5 +17,6 @@ class BaseApplication : Application() {
         super.onCreate()
 
         daggerComponent = DaggerApplicationComponent.factory().create(this)
+        Timber.plant(Timber.DebugTree())
     }
 }

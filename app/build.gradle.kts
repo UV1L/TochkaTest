@@ -44,12 +44,15 @@ dependencies {
     implementation(project(":di"))
 
     // FirebaseUI
-    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
+    implementation(Dependencies.Firebase.firebaseUi)
 
     // Navigation
     implementation(Dependencies.Navigation.navigationFragment)
     implementation(Dependencies.Navigation.navigationUi)
     androidTestImplementation(Dependencies.Navigation.navigationTest)
+
+    // Timber
+    implementation(Dependencies.Timber.timber)
 
     implementation(Dependencies.Android.appCompat)
     testImplementation(Dependencies.Test.junit)

@@ -32,6 +32,10 @@ object Versions {
     const val retrofit = "2.9.0"
     // Coroutines
     const val coroutines = "1.3.9"
+    // Timber
+    const val timber = "5.0.1"
+    // Firebase
+    const val firebaseUi = "7.2.0"
 }
 
 object Dependencies {
@@ -88,5 +92,15 @@ object Dependencies {
     object Coroutines {
 
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    }
+
+    object Timber {
+
+        const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+    }
+
+    object Firebase {
+
+        const val firebaseUi = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUi}"
     }
 }

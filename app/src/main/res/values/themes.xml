@@ -5,7 +5,8 @@
         <item name="colorPrimary">@color/light_gray</item>
         <item name="colorPrimaryDark">#919191</item>
         <item name="colorAccent">@color/very_dark_blue</item>
-        <item name="android:textColor">@color/dark_purple</item>
+        <item name="android:textColor">#000000</item>
+        <item name="cardBackgroundColor">#3DFFC0</item>
         <!-- Customize your theme here. -->
     </style>
 

@@ -24,7 +24,8 @@ class AuthFragment : Fragment() {
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { onSignInResult(it) }
-    private lateinit var viewBinding: FragmentAuthBinding
+    private var _viewBinding: FragmentAuthBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,12 +33,25 @@ class AuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        viewBinding = FragmentAuthBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentAuthBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewBinding.authSignInButton.setOnClickListener {
+            launchSignInIntent()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        _viewBinding = null
+    }
+
+    private fun launchSignInIntent() {
 
         val googleProvider = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()

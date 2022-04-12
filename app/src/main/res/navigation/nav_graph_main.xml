@@ -13,5 +13,12 @@
     </fragment>
 
     <fragment android:id="@+id/home_fragment"
-        android:name="anton.android.tochkatest.ui.HomeScreenFragment" />
+        android:name="anton.android.tochkatest.ui.HomeScreenFragment" >
+
+        <action
+            android:id="@+id/action_home_fragment_to_auth_fragment"
+            app:destination="@id/auth_fragment"
+            app:popUpTo="@id/home_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
