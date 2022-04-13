@@ -59,3 +59,5 @@ dependencies {
     androidTestImplementation(Dependencies.Test.testRunner)
     androidTestImplementation(Dependencies.Test.espresso)
 }
+
+apply<DaggerPlugin>()

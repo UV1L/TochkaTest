@@ -2,35 +2,28 @@ package anton.android.tochkatest.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.FragmentHomeBinding
+import anton.android.tochkatest.ui.base.BaseSaveableFragment
 import anton.android.tochkatest.utils.ApplicationState
 import anton.android.tochkatest.view_model.HomeScreenViewModel
 import com.firebase.ui.auth.AuthUI
 import timber.log.Timber
+import javax.inject.Inject
 
-class HomeScreenFragment : Fragment(),
+class HomeScreenFragment @Inject constructor(
+    private val viewModel: HomeScreenViewModel
+) : BaseSaveableFragment(viewModel),
     View.OnClickListener {
-
-    companion object {
-        const val IS_NAV_OPEN_TAG = "navigationViewTag"
-    }
 
     private var _viewBinding: FragmentHomeBinding? = null
     private val viewBinding get() = _viewBinding!!
-
-    private var signOutAlertDialog: AlertDialog? = null
-    private val homeScreenViewModel: HomeScreenViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,17 +31,9 @@ class HomeScreenFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
 
-        var isOpen = false
-        if (savedInstanceState != null) {
-            isOpen = savedInstanceState.getBoolean(IS_NAV_OPEN_TAG)
-        }
         _viewBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
         viewBinding.homeNavigation.setupWithNavController(findNavController())
-        if (isOpen) openMenu()
-        homeScreenViewModel.isDialogShown.observe(viewLifecycleOwner) { isShown ->
-            if (isShown) signOut()
-        }
         return viewBinding.root
     }
 
@@ -57,6 +42,7 @@ class HomeScreenFragment : Fragment(),
 
         viewBinding.homeMenuButton.setOnClickListener(this)
         viewBinding.homeSignOutButton.setOnClickListener(this)
+        observeAll()
     }
 
     override fun onDestroy() {
@@ -65,11 +51,17 @@ class HomeScreenFragment : Fragment(),
         _viewBinding = null
     }
 
+    override fun saveState(): Bundle {
+
+        val bundle = Bundle()
+        bundle.putBoolean(HomeScreenViewModel.IS_NAV_OPEN_TAG, viewBinding.root.isOpen)
+        return bundle
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(IS_NAV_OPEN_TAG, viewBinding.root.isOpen)
-        homeScreenViewModel.saveIsDialogShown(signOutAlertDialog?.isShowing ?: false)
+//        homeScreenViewModel.saveNavState(viewBinding.root.isOpen)
         Timber.d("onSave")
     }
 
@@ -78,7 +70,18 @@ class HomeScreenFragment : Fragment(),
         when (view) {
             viewBinding.homeMenuButton -> openMenu()
 
-            viewBinding.homeSignOutButton -> signOut()
+            viewBinding.homeSignOutButton -> viewModel.performOnSignOutClick()
+        }
+    }
+
+    private fun observeAll() {
+
+        viewModel.isDialogShown.observe(viewLifecycleOwner) { isShown ->
+            if (isShown) signOut()
+        }
+
+        viewModel.isNavShown.observe(viewLifecycleOwner) { isOpen ->
+            if (isOpen) openMenu()
         }
     }
 
@@ -88,7 +91,7 @@ class HomeScreenFragment : Fragment(),
 
     private fun signOut() {
 
-        signOutAlertDialog = AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.are_you_sure_message))
             .setPositiveButton(getString(R.string.yes_string)) { _, _ ->
                 AuthUI.getInstance()
@@ -96,7 +99,9 @@ class HomeScreenFragment : Fragment(),
                 ApplicationState.currentUser = null
                 findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToAuthFragment())
             }
-            .setNegativeButton(getString(R.string.no_string)) { _, _ -> }
+            .setNegativeButton(getString(R.string.no_string)) { _, _ ->
+                viewModel.performOnSignOutClick()
+            }
             .create()
             .apply { show() }
     }
