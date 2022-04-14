@@ -93,16 +93,3 @@ inline fun <reified E : Throwable> convertErrorBody(throwable: HttpException): E
         null
     }
 }
-
-inline fun <E, T : Throwable> wrapResult(func: () -> ResultWrapper<E, out T>): Result<E> {
-
-    val result = func.invoke()
-
-    return when (result) {
-        is ResultWrapper.NetworkError -> Result.failure(Throwable(""))
-
-        is ResultWrapper.GenericError -> Result.failure(result.error as Throwable)
-
-        is ResultWrapper.Success -> Result.success(result.value)
-    }
-}

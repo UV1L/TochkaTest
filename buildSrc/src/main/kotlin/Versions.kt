@@ -36,6 +36,8 @@ object Versions {
     const val timber = "5.0.1"
     // Firebase
     const val firebaseUi = "7.2.0"
+    // Paging
+    const val pagingVersion = "3.0.0-alpha12"
 }
 
 object Dependencies {
@@ -102,5 +104,10 @@ object Dependencies {
     object Firebase {
 
         const val firebaseUi = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUi}"
+    }
+
+    object Paging {
+
+        const val paging = "androidx.paging:paging-runtime:${Versions.pagingVersion}"
     }
 }

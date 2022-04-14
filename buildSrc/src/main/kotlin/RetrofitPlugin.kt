@@ -10,6 +10,7 @@ class RetrofitPlugin : Plugin<Project> {
 
             add("implementation", Dependencies.Retrofit.retrofit)
             add("implementation", Dependencies.Retrofit.retrofitGson)
+            add("implementation", Dependencies.Paging.paging)
         }
         target.apply<CoroutinesPlugin>()
     }
