@@ -47,3 +47,4 @@ dependencies {
 }
 
 apply<RetrofitPlugin>()
+apply<DaggerPlugin>()
