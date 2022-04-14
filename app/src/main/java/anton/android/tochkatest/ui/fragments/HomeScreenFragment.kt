@@ -1,20 +1,16 @@
-package anton.android.tochkatest.ui
+package anton.android.tochkatest.ui.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.FragmentHomeBinding
-import anton.android.tochkatest.databinding.NavigationViewHeaderLayoutBinding
+import anton.android.tochkatest.ui.MainActivity
 import anton.android.tochkatest.ui.base.BaseSaveableFragment
 import anton.android.tochkatest.view_model.HomeScreenViewModel
 import observeAllBooleans

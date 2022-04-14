@@ -1,10 +1,22 @@
 package anton.android.tochkatest.view_model
 
+import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import anton.android.tochkatest.utils.ApplicationState
 import anton.android.tochkatest.view_model.base.BaseViewModel
+import com.firebase.ui.auth.AuthUI
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(private val savedStateHandle: SavedStateHandle) :
     BaseViewModel(savedStateHandle) {
@@ -12,7 +24,10 @@ class HomeScreenViewModel(private val savedStateHandle: SavedStateHandle) :
     companion object {
         const val IS_DIALOG_SHOWN_TAG = "isDialogShown"
         const val IS_NAV_OPEN_TAG = "navigationViewTag"
+        const val IS_SIGNED_OUT = "isSignedOut"
     }
+
+    private var searchJob: Job? = null
 
     private val _isDialogShown: MutableLiveData<Boolean> =
         savedStateHandle.getLiveData<Boolean?>(IS_DIALOG_SHOWN_TAG).apply { value = false }
@@ -20,25 +35,45 @@ class HomeScreenViewModel(private val savedStateHandle: SavedStateHandle) :
     private val _isNavShown: MutableLiveData<Boolean> =
         savedStateHandle.getLiveData<Boolean?>(IS_NAV_OPEN_TAG).apply { value = false }
 
+    private val _isSignedOut: MutableLiveData<Boolean> =
+        savedStateHandle.getLiveData<Boolean?>(IS_SIGNED_OUT).apply { value = false }
+
     val isDialogShown: LiveData<Boolean> = _isDialogShown
     val isNavShown: LiveData<Boolean> = _isNavShown
+    val isSignedOut: LiveData<Boolean> = _isSignedOut
 
-    init {
+    override fun restoreState() {
+
         val savedBundle = savedStateHandle.get<Bundle>(requireTag())
-        if (savedBundle != null) {
-            if (savedBundle.containsKey(IS_NAV_OPEN_TAG)) {
+        savedBundle?.changeStateFor(IS_DIALOG_SHOWN_TAG, IS_NAV_OPEN_TAG)
+    }
 
-                val isOpen = savedBundle.getBoolean(IS_NAV_OPEN_TAG)
-                savedStateHandle.set(IS_NAV_OPEN_TAG, isOpen)
+    fun signOut(application: Application) {
+
+        val task = AuthUI.getInstance()
+            .signOut(application)
+        task.addOnCompleteListener { _isSignedOut.value = true }
+        ApplicationState.currentUser = null
+    }
+
+    fun searchDataChanged(newString: String) {
+
+        if (newString.isNotEmpty()) {
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                delay(600)
+
             }
         }
     }
 
-    fun saveNavState(state: Boolean) {
-        savedStateHandle.set(IS_NAV_OPEN_TAG, state)
-    }
+    private fun Bundle.changeStateFor(vararg tags: String) {
 
-    fun performOnSignOutClick() {
-        savedStateHandle.set(IS_DIALOG_SHOWN_TAG, !isDialogShown.value!!)
+        tags.forEach { tag ->
+            if (this.containsKey(tag)) {
+                val flag = this.getBoolean(tag)
+                savedStateHandle.set(tag, flag)
+            }
+        }
     }
 }

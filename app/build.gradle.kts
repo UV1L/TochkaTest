@@ -43,6 +43,11 @@ dependencies {
     // DI module
     implementation(project(":di"))
 
+    // domain module
+    implementation(project(":domain:api")) {
+        isTransitive = false
+    }
+
     // FirebaseUI
     implementation(Dependencies.Firebase.firebaseUi)
 

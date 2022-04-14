@@ -1,4 +1,4 @@
-package anton.android.tochkatest.ui
+package anton.android.tochkatest.ui.fragments
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle

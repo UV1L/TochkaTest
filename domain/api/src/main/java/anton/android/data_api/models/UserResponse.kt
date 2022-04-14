@@ -1,3 +1,5 @@
 package anton.android.data_api.models
 
-data class UserResponse()
+data class UserResponse(
+    val username: String,
+)

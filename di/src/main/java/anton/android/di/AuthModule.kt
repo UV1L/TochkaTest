@@ -5,6 +5,4 @@ import dagger.Module
 
 @Module
 abstract class AuthModule {
-
-    @Binds
 }

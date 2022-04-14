@@ -13,4 +13,5 @@
     <string name="are_you_sure_message">Вы точно хотите выйти?</string>
     <string name="yes_string">Да</string>
     <string name="no_string">Нет</string>
+    <string name="change_account">Сменить аккаунт</string>
 </resources>

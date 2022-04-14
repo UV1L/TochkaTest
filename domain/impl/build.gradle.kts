@@ -9,5 +9,7 @@ java {
 }
 
 dependencies {
-    api(project(":domain:"))
+    implementation(project(":domain:api")) {
+        isTransitive = true
+    }
 }

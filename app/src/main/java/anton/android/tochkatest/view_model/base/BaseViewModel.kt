@@ -8,6 +8,8 @@ abstract class BaseViewModel(private val savedStateHandle: SavedStateHandle) : V
 
     private var TAG: String? = null
 
+    abstract fun restoreState()
+
     fun requireTag() = TAG!!
 
     fun setSavedStateProvider(key: String, provider: SavedStateRegistry.SavedStateProvider) {

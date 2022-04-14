@@ -1,4 +1,8 @@
 package anton.android.tochkatest.utils
 
-class BaseViewModelProvider {
+import anton.android.tochkatest.view_model.base.BaseViewModel
+
+fun interface BaseViewModelProvider {
+
+    fun provideViewModel(): BaseViewModel
 }
