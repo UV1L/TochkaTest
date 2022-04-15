@@ -1,18 +1,23 @@
 package anton.android.data_impl.network
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import anton.android.data_impl.models.userEntity
-import anton.android.domain_api.home.entities.UserEntity
-import anton.android.utils.ResultWrapper
+import anton.android.domain_api.entities.UserEntity
+import anton.android.domain_api.utils.Const
+import anton.android.domain_api.utils.ResultWrapper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import retrofit2.HttpException
 import retrofit2.await
 import safeApiCallAsync
-import javax.inject.Inject
+import userEntity
 
-class GithubUsersPagingSource @Inject constructor(
+class GithubUsersPagingSource(
     private val githubService: GithubService,
+    private val username: String,
 ) : PagingSource<Int, UserEntity>() {
 
     companion object {
@@ -22,12 +27,17 @@ class GithubUsersPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserEntity> {
 
+        if (username.isBlank()) {
+            return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
+        }
+
         try {
             val pageNumber = params.key ?: INITIAL_PAGE_NUMBER
             val result = safeApiCallAsync<List<UserEntity>, HttpException>(Dispatchers.IO) {
                 githubService
-                    .getAllUsers()
-                    .await()
+                    .getAllUsers(username, pageNumber, Const.DEFAULT_PAGE_SIZE)
+                    .body()!!
+                    .users
                     .userEntity()
             }
 
@@ -39,6 +49,7 @@ class GithubUsersPagingSource @Inject constructor(
                 is ResultWrapper.Success -> {
                     val nextPageNumber = if (result.value.isEmpty()) null else pageNumber + 1
                     val prevPageNumber = if (pageNumber > 1) pageNumber - 1 else null
+                    Log.d("TAG", "Success loaded")
                     LoadResult.Page(result.value, prevPageNumber, nextPageNumber)
                 }
             }

@@ -69,6 +69,8 @@ object Dependencies {
         const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
         const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
         const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+        const val assistedInject = "com.squareup.inject:assisted-inject-annotations-dagger2:0.5.2"
+        const val assistedInjectProcessor = "com.squareup.inject:assisted-inject-processor-dagger2:0.5.2"
     }
 
     object Navigation {

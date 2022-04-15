@@ -8,6 +8,7 @@ class CoroutinesPlugin : Plugin<Project> {
         target.dependencies {
 
             add("api", Dependencies.Coroutines.coroutines)
+            add("implementation", Dependencies.Paging.paging)
         }
 //        target.apply<MoshiPlugin>()
     }

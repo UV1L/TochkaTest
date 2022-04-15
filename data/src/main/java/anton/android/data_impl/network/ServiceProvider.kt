@@ -2,8 +2,9 @@ package anton.android.data_impl.network
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class ServiceProvider(
+class ServiceProvider @Inject constructor(
     private var retrofit: Retrofit,
 ) {
 

@@ -38,6 +38,9 @@ dependencies {
     implementation(project(":domain:api")) {
         isTransitive = false
     }
+    implementation(project(":domain:impl")) {
+        isTransitive = false
+    }
 
     // data module
     implementation(project(":data")) {

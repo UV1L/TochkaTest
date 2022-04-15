@@ -4,7 +4,7 @@
     android:id="@+id/nav_graph_main">
 
     <fragment android:id="@+id/auth_fragment"
-        android:name="anton.android.tochkatest.ui.fragments.AuthFragment">
+        android:name="anton.android.tochkatest.ui.auth.AuthFragment">
 
         <action android:id="@+id/auth_fragment_to_home_fragment"
             app:destination="@id/home_fragment"
@@ -13,7 +13,7 @@
     </fragment>
 
     <fragment android:id="@+id/home_fragment"
-        android:name="anton.android.tochkatest.ui.fragments.HomeScreenFragment" >
+        android:name="anton.android.tochkatest.ui.home.HomeScreenFragment" >
 
         <action
             android:id="@+id/action_home_fragment_to_auth_fragment"

@@ -47,10 +47,9 @@ class MainActivity : AppCompatActivity() {
         _viewBinding = null
     }
 
-    fun openDrawer() {
+    fun openDrawer() = viewBinding.root.openDrawer(Gravity.LEFT)
 
-        viewBinding.root.openDrawer(Gravity.LEFT)
-    }
+    fun isDrawerOpen() = viewBinding.root.isOpen
 
     fun showSignOutNavigation() {
 

@@ -14,4 +14,6 @@
     <string name="yes_string">Да</string>
     <string name="no_string">Нет</string>
     <string name="change_account">Сменить аккаунт</string>
+    <string name="repositories_string">репозитории</string>
+    <string name="username_string">username</string>
 </resources>

@@ -15,12 +15,10 @@ dependencyResolutionManagement {
 rootProject.name = "TochkaTest"
 // app
 include(":app")
-// di
-include(":di")
 
 // domain
 include(":domain:api")
-include(":domain:impl")
 
 //data
 include(":data")
+include(":domain:impl")

@@ -1,10 +1,9 @@
 package anton.android.tochkatest
 
 import android.app.Application
-import anton.android.di.ApplicationComponent
-import anton.android.di.DaggerApplicationComponent
+import anton.android.tochkatest.di.ApplicationComponent
+import anton.android.tochkatest.di.DaggerApplicationComponent
 import anton.android.tochkatest.utils.ApplicationState
-import com.firebase.ui.auth.AuthUI
 import timber.log.Timber
 
 class BaseApplication : Application() {

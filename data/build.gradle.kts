@@ -35,7 +35,7 @@ android {
 dependencies {
 
     implementation(project(":domain:api")) {
-        isTransitive = true
+        isTransitive = false
     }
 
     implementation("androidx.core:core-ktx:1.7.0")

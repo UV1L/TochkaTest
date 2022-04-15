@@ -40,11 +40,17 @@ android {
 }
 
 dependencies {
-    // DI module
-    implementation(project(":di"))
 
     // domain module
     implementation(project(":domain:api")) {
+        isTransitive = false
+    }
+    implementation(project(":domain:impl")) {
+        isTransitive = false
+    }
+
+    // data module
+    implementation(project(":data")) {
         isTransitive = false
     }
 
@@ -59,6 +65,13 @@ dependencies {
     // Timber
     implementation(Dependencies.Timber.timber)
 
+    // Paging
+    implementation(Dependencies.Paging.paging)
+
+    val lifecycleVersion = "2.4.0-alpha01"
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation(Dependencies.Android.appCompat)
     testImplementation(Dependencies.Test.junit)
     androidTestImplementation(Dependencies.Test.testRunner)
@@ -66,3 +79,4 @@ dependencies {
 }
 
 apply<DaggerPlugin>()
+apply<RetrofitPlugin>()

@@ -15,4 +15,9 @@
         <item name="fontFamily">@font/lato_light</item>
         <item name="android:textColor">@color/gray</item>
     </style>
+
+    <style name="RoundedImageView" parent="">
+        <item name="android:src">@drawable/rounded_view</item>
+        <item name="backgroundTint">#15000000</item>
+    </style>
 </resources>

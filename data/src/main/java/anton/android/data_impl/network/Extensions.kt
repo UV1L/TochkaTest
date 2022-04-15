@@ -1,4 +1,4 @@
-import anton.android.utils.ResultWrapper
+import anton.android.domain_api.utils.ResultWrapper
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -6,7 +6,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.util.logging.Logger
 
-val logger: Logger = Logger.getLogger("NetworkExtensions")
+val logger: Logger = Logger.getLogger("Extensions")
 
 suspend inline fun <T, reified E : Throwable> safeApiCallAsync(
     dispatcher: CoroutineDispatcher, crossinline apiCall: suspend () -> T,
@@ -21,7 +21,12 @@ suspend inline fun <T, reified E : Throwable> safeApiCallAsync(
         } catch (throwable: Throwable) {
             when (throwable) {
                 is IOException -> {
-                    logger.severe("safe api call async network error")
+                    logger.severe(
+                        "safe api call async network error: " +
+                                "${throwable.message} \n" +
+                                "cause by: \n" +
+                                "${throwable.cause}"
+                    )
                     ResultWrapper.NetworkError
                 }
 
@@ -36,7 +41,12 @@ suspend inline fun <T, reified E : Throwable> safeApiCallAsync(
                 }
 
                 else -> {
-                    logger.severe("safe api call async unknown error")
+                    logger.severe(
+                        "safe api call async unknown error: " +
+                                "${throwable.message} \n" +
+                                "cause by: \n" +
+                                "${throwable.cause}"
+                    )
                     ResultWrapper.GenericError(null, null)
                 }
             }
@@ -48,20 +58,20 @@ inline fun <T, reified E : Throwable> safeApiCall(
     crossinline apiCall: () -> T,
 ): ResultWrapper<T, out E> {
 
-    logger.fine("safe api call async running")
+    logger.fine("safe api call running")
     return try {
         ResultWrapper.Success<T, E>(apiCall.invoke()).apply {
-            logger.fine("safe api call async success")
+            logger.fine("safe api call success")
         }
     } catch (throwable: Throwable) {
         when (throwable) {
             is IOException -> {
-                logger.severe("safe api call async network error")
+                logger.severe("safe api call network error")
                 ResultWrapper.NetworkError
             }
 
             is HttpException -> {
-                logger.severe("safe api call async http exception: " +
+                logger.severe("safe api call http exception: " +
                         "${throwable.message()} \n" +
                         "cause by response: \n" +
                         " ${throwable.response()}")
@@ -71,7 +81,12 @@ inline fun <T, reified E : Throwable> safeApiCall(
             }
 
             else -> {
-                logger.severe("safe api call async unknown error")
+                logger.severe(
+                    "safe api call unknown error: " +
+                            "${throwable.message} \n" +
+                            "cause by: \n" +
+                            "${throwable.cause}"
+                )
                 ResultWrapper.GenericError(null, null)
             }
         }
