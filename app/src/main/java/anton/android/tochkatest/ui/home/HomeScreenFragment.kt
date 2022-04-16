@@ -18,12 +18,16 @@ import anton.android.tochkatest.databinding.FragmentHomeBinding
 import anton.android.tochkatest.ui.MainActivity
 import anton.android.tochkatest.ui.base.BaseSaveableFragment
 import anton.android.tochkatest.view_model.HomeScreenViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import observeAllBooleans
 import timber.log.Timber
+import kotlin.coroutines.coroutineContext
 
 class HomeScreenFragment : BaseSaveableFragment(),
     View.OnClickListener {
@@ -51,7 +55,7 @@ class HomeScreenFragment : BaseSaveableFragment(),
 
         addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.users
-                .collectLatest(adapter::submitData)
+                .collectLatest { updateViewOnSearched(it) }
         }
 
         return viewBinding.root
@@ -142,10 +146,15 @@ class HomeScreenFragment : BaseSaveableFragment(),
         findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToAuthFragment())
 
     private suspend fun updateViewOnSearched(pagingData: PagingData<UserEntity>) {
-        if (viewModel.query.last().isNotBlank()) {
-            viewBinding.homeSearchView.background =
-                getDrawable(requireContext(), R.drawable.rounded_field_top)
+
+        lifecycleScope.launch {
+            adapter.submitData(pagingData)
         }
-        adapter.submitData(pagingData)
+        lifecycleScope.launch {
+            if (viewModel.query.last().isNotBlank()) {
+                viewBinding.homeSearchView.background =
+                    getDrawable(requireContext(), R.drawable.rounded_field_top)
+            }
+        }
     }
 }

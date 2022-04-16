@@ -59,6 +59,7 @@ class HomeScreenViewModel @AssistedInject constructor(
     val users: StateFlow<PagingData<UserEntity>> =
         query.map(::getPager)
             .flatMapLatest { it.flow }
+            .cachedIn(viewModelScope)
             .stateIn(
                 viewModelScope,
                 SharingStarted.Lazily,
