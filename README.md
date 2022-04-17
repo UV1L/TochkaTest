@@ -2,6 +2,8 @@
  
 Приложение для поиска пользователей на Github
 
+release apk:[apk.zip](https://github.com/UV1L/TochkaTest/files/8502610/apk.zip)
+
 ver: 1.0
 
 ![imgonline-com-ua-Resize-Ozkh6Wi3mU2Su](https://user-images.githubusercontent.com/50074365/163735636-c4279d30-194b-4d27-a8d9-b0cba4e639e4.jpg)
