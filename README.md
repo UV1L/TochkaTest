@@ -3,6 +3,7 @@
 Приложение для поиска пользователей на Github
 
 ver: 1.0
+![imgonline-com-ua-Resize-Ozkh6Wi3mU2Su](https://user-images.githubusercontent.com/50074365/163735609-74322462-f7bc-4c95-a017-d6382f4a86a2.jpg)
 
 ![Screenshot_1650236633](https://user-images.githubusercontent.com/50074365/163735521-8f24ce5b-dd79-4716-bc51-947de9156a5d.png)
 ![Screenshot_1650236689](https://user-images.githubusercontent.com/50074365/163735547-3d487947-1ec9-4333-9d17-aaae5cb8eb85.png)
