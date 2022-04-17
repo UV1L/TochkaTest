@@ -5,7 +5,9 @@ import anton.android.data_impl.AppSettingsRepository
 import anton.android.data_impl.GithubUsersRepositoryImpl
 import anton.android.data_impl.network.ServiceProvider
 import anton.android.domain_api.data_api.GithubUsersRepository
+import anton.android.domain_api.use_cases.GithubRepositoriesUseCase
 import anton.android.domain_api.use_cases.GithubUsersUseCase
+import anton.android.domain_impl.use_cases.GithubRepositoriesUseCaseImpl
 import anton.android.domain_impl.use_cases.GithubUsersUseCaseImpl
 import dagger.Module
 import dagger.Provides
@@ -22,6 +24,11 @@ class ApplicationModule {
     @Provides
     fun provideGithubUsersUseCase(githubUsersRepository: GithubUsersRepository): GithubUsersUseCase {
         return GithubUsersUseCaseImpl(githubUsersRepository)
+    }
+
+    @Provides
+    fun provideGithubRepositoriesUseCase(githubUsersRepository: GithubUsersRepository): GithubRepositoriesUseCase {
+        return GithubRepositoriesUseCaseImpl(githubUsersRepository)
     }
 
     @Provides

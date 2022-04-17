@@ -1,22 +1,30 @@
 package anton.android.tochkatest.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.savedstate.SavedStateRegistryOwner
 import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.ActivityMainBinding
+import anton.android.tochkatest.ui.base.NoInternetSnackbar
+import anton.android.tochkatest.utils.ConnectionStateMonitor
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+    SavedStateRegistryOwner,
+    ConnectionStateMonitor.OnNetworkAvailableCallbacks {
 
     private var _viewBinding: ActivityMainBinding? = null
     private val viewBinding get() = _viewBinding!!
 
-    @SuppressLint("InflateParams")
+    private var snackbar: NoInternetSnackbar? = null
+    private var connectionStateMonitor: ConnectionStateMonitor? = null
+    private var viewGroup: ViewGroup? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,8 +45,38 @@ class MainActivity : AppCompatActivity() {
             }
             val navController = navHostFragment.navController
             navController.setGraph(graph, intent.extras)
-            viewBinding.activityMainNavigation.setupWithNavController(navController)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (viewGroup == null)
+            viewGroup = findViewById(android.R.id.content)
+
+        if (snackbar == null)
+            snackbar = NoInternetSnackbar
+                .build(
+                    viewGroup!!,
+                    Snackbar.LENGTH_INDEFINITE
+                )
+
+        if (connectionStateMonitor == null)
+            connectionStateMonitor = ConnectionStateMonitor(this, this)
+
+        connectionStateMonitor?.enable()
+
+        if (connectionStateMonitor?.hasNetworkConnection() == false) onNegative()
+        else onPositive()
+    }
+
+    override fun onPause() {
+
+        snackbar?.dismiss()
+        snackbar = null
+        connectionStateMonitor?.disable()
+        connectionStateMonitor = null
+        super.onPause()
     }
 
     override fun onDestroy() {
@@ -47,12 +85,17 @@ class MainActivity : AppCompatActivity() {
         _viewBinding = null
     }
 
-    fun openDrawer() = viewBinding.root.openDrawer(Gravity.LEFT)
+    override fun onPositive() {
 
-    fun isDrawerOpen() = viewBinding.root.isOpen
+        lifecycleScope.launch(Dispatchers.Main) {
+            snackbar?.dismiss()
+        }
+    }
 
-    fun showSignOutNavigation() {
+    override fun onNegative() {
 
-        viewBinding.navigationMenuContainer.visibility = View.VISIBLE
+        lifecycleScope.launch(Dispatchers.Main) {
+            snackbar?.show()
+        }
     }
 }

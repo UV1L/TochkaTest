@@ -2,38 +2,36 @@ package anton.android.tochkatest.ui.home
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import anton.android.domain_api.entities.UserEntity
+import androidx.navigation.ui.setupWithNavController
 import anton.android.tochkatest.BaseApplication
 import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.FragmentHomeBinding
-import anton.android.tochkatest.ui.MainActivity
+import anton.android.tochkatest.databinding.NavigationViewHeaderLayoutBinding
 import anton.android.tochkatest.ui.base.BaseSaveableFragment
+import anton.android.tochkatest.ui.base.viewModel
+import anton.android.tochkatest.utils.ApplicationState
 import anton.android.tochkatest.view_model.HomeScreenViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import observeAllBooleans
 import timber.log.Timber
-import kotlin.coroutines.coroutineContext
 
 class HomeScreenFragment : BaseSaveableFragment(),
     View.OnClickListener {
 
-    private var _viewBinding: FragmentHomeBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private var _dataBinding: FragmentHomeBinding? = null
+    private val dataBinding get() = _dataBinding!!
+
+    private var _navBinding: NavigationViewHeaderLayoutBinding? = null
+    private val navBinding get() = _navBinding!!
+
     private val application: BaseApplication by lazy { requireActivity().application as BaseApplication }
     private val viewModel: HomeScreenViewModel by viewModel {
         application.daggerComponent.homeScreenViewModelFactory.create(it)
@@ -50,34 +48,23 @@ class HomeScreenFragment : BaseSaveableFragment(),
         savedInstanceState: Bundle?
     ): View {
 
-        _viewBinding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewBinding.homeUsersRecycler.adapter = adapter
+        _dataBinding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        setupView()
+        setupNavigation()
 
         addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.users
-                .collectLatest { updateViewOnSearched(it) }
+                .collectLatest(adapter::submitData)
         }
 
-        return viewBinding.root
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewBinding.homeMenuButton.setOnClickListener(this)
-        viewBinding.homeSignOutButton.setOnClickListener(this)
-        viewBinding.homeSearchView.setOnClickListener(this)
-        viewBinding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { viewModel.searchDataChanged(newText) }
-                return true
-            }
-        })
+        setupListeners()
         observeAll()
     }
 
@@ -98,17 +85,17 @@ class HomeScreenFragment : BaseSaveableFragment(),
     override fun onDestroy() {
         super.onDestroy()
 
-        _viewBinding = null
+        _dataBinding = null
     }
 
     override fun onClick(view: View?) {
 
         when (view) {
-            viewBinding.homeMenuButton -> openMenu()
+            dataBinding.homeMenuButton -> openMenu()
 
-            viewBinding.homeSignOutButton -> signOut()
+            dataBinding.homeSignOutButton -> signOut()
 
-            viewBinding.homeSearchView -> openEditor()
+            dataBinding.homeSearchView -> openEditor()
         }
     }
 
@@ -121,9 +108,9 @@ class HomeScreenFragment : BaseSaveableFragment(),
         ).observeAllBooleans(viewLifecycleOwner)
     }
 
-    private fun openMenu() = (activity as MainActivity).openDrawer()
+    private fun openMenu() = dataBinding.homeDrawer.openDrawer(Gravity.LEFT)
 
-    private fun isDrawerOpen() = (activity as MainActivity).isDrawerOpen()
+    private fun isDrawerOpen() = _dataBinding?.homeDrawer?.isOpen ?: false
 
     private fun signOut() {
 
@@ -139,22 +126,45 @@ class HomeScreenFragment : BaseSaveableFragment(),
 
     private fun openEditor() {
 
-        viewBinding.homeSearchView.isIconified = false
+        dataBinding.homeSearchView.isIconified = false
     }
 
     private fun popBackOnAuthFragmentInclusive() =
         findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToAuthFragment())
 
-    private suspend fun updateViewOnSearched(pagingData: PagingData<UserEntity>) {
+    private fun setupView() {
+        dataBinding.homeUsersRecycler.adapter = adapter
+    }
 
-        lifecycleScope.launch {
-            adapter.submitData(pagingData)
-        }
-        lifecycleScope.launch {
-            if (viewModel.query.last().isNotBlank()) {
-                viewBinding.homeSearchView.background =
-                    getDrawable(requireContext(), R.drawable.rounded_field_top)
+    private fun setupNavigation() {
+
+        dataBinding.homeNavigation.setupWithNavController(findNavController())
+        val navHeader = dataBinding.homeNavigation.getHeaderView(0)
+        _navBinding = NavigationViewHeaderLayoutBinding.bind(navHeader)
+        navBinding.state = ApplicationState
+        navBinding.navHeaderUsername.isSelected = true
+    }
+
+    private fun setupListeners() {
+
+        dataBinding.homeMenuButton.setOnClickListener(this)
+        dataBinding.homeSignOutButton.setOnClickListener(this)
+        dataBinding.homeSearchView.setOnClickListener(this)
+        dataBinding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToUserListFragment(
+                    viewModel.stringQuery
+                ))
+                return true
             }
-        }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.searchDataChanged(newText)
+                }
+                return true
+            }
+        })
     }
 }

@@ -20,6 +20,8 @@ object Versions {
     const val junitExt = "1.1.3"
     const val testRunner = "1.0.2"
     const val espresso = "3.4.0"
+    // Lifecycle
+    const val lifecycleVersion = "2.4.0-alpha01"
     // Dagger
     const val dagger = "2.40.5"
     // Hilt
@@ -38,6 +40,10 @@ object Versions {
     const val firebaseUi = "7.2.0"
     // Paging
     const val pagingVersion = "3.0.0-alpha12"
+    // Picasso
+    const val picasso = "2.8"
+    // Transformations
+    const val transformations = "2.4.0"
 }
 
 object Dependencies {
@@ -52,6 +58,13 @@ object Dependencies {
 
         const val startupRuntime = "androidx.startup:startup-runtime:${Versions.startupRuntime}"
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
+    }
+
+    object Lifecycle {
+
+        const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
+        const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
+        const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
     }
 
     object Test {
@@ -111,5 +124,11 @@ object Dependencies {
     object Paging {
 
         const val paging = "androidx.paging:paging-runtime:${Versions.pagingVersion}"
+    }
+
+    object Picasso {
+
+        const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
+        const val transformations = "jp.wasabeef:picasso-transformations:${Versions.transformations}"
     }
 }

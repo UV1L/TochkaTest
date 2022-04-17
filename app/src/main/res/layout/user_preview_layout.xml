@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:backgroundTint="?colorPrimary"
-    app:cardElevation="12dp"
-    android:layout_gravity="center">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground">
+
+    <data>
+        <variable
+            name="user"
+            type="anton.android.domain_api.entities.UserEntity" />
+    </data>
 
     <LinearLayout
+        android:id="@+id/userPreviewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
 
         <ImageView
-            android:id="@+id/userAvatar"
+            android:id="@+id/user_avatar"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/rounded_view"
+            android:layout_gravity="center"
+            app:imageUrlCircle="@{user.avatarUrl}"
+            tools:src="@drawable/ic_launcher"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/user_name"
             style="@style/BodyTextTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/username_string"
-            android:textAlignment="center"
             android:layout_gravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
-            app:layout_constraintStart_toEndOf="@id/userAvatar"
-            app:layout_constraintTop_toTopOf="@+id/userAvatar" />
+            android:layout_marginStart="10dp"
+            tools:text="Username"
+            android:text="@{user.username}"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/user_avatar"
+            app:layout_constraintStart_toEndOf="@id/user_avatar"
+            app:layout_constraintTop_toTopOf="@+id/user_avatar"
+            tools:ignore="RtlCompat" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</layout>

@@ -1,25 +1,35 @@
 package anton.android.tochkatest.ui.home
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import anton.android.domain_api.entities.UserEntity
-import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.UserLayoutBinding
 
-class GithubUsersAdapter(context: Context) :
+class GithubUsersAdapter(private val context: Context) :
     PagingDataAdapter<UserEntity, GithubUsersAdapter.GithubUsersViewHolder>(GithubUsersDiffCallback) {
 
-    class GithubUsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class GithubUsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val viewBinding = UserLayoutBinding.bind(itemView)
+        private val _binding: UserLayoutBinding? = DataBindingUtil.bind(itemView)
+        private val binding get() = _binding!!
 
         fun bind(user: UserEntity?) {
-            viewBinding.userName.text = user?.username
+
+            binding.user = user!!
+
+            binding.userProfile.setOnClickListener {
+                val reposIntent = Intent(Intent.ACTION_VIEW)
+                reposIntent.data = Uri.parse(user.profileUrl)
+                context.startActivity(reposIntent)
+            }
         }
     }
 
@@ -41,12 +51,8 @@ class GithubUsersAdapter(context: Context) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GithubUsersViewHolder {
-        return GithubUsersViewHolder(
-            layoutInflater.inflate(
-                R.layout.user_layout,
-                parent,
-                false
-            )
-        )
+
+        val binding = UserLayoutBinding.inflate(layoutInflater, parent, false)
+        return GithubUsersViewHolder(binding.root)
     }
 }

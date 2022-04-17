@@ -62,16 +62,11 @@ class AuthFragment : Fragment() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
 
         if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
             ApplicationState.currentUser = user
             findNavController().navigate(AuthFragmentDirections.authFragmentToHomeFragment())
         } else {
             Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
         }
     }
 }

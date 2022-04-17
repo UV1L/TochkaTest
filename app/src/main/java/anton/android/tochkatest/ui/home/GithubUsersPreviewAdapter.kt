@@ -4,11 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import anton.android.domain_api.entities.UserEntity
-import anton.android.tochkatest.R
 import anton.android.tochkatest.databinding.UserPreviewLayoutBinding
 
 class GithubUsersPreviewAdapter(context: Context) :
@@ -18,10 +21,28 @@ class GithubUsersPreviewAdapter(context: Context) :
 
     class GithubUsersPreviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val viewBinding = UserPreviewLayoutBinding.bind(itemView)
+        private val _binding: UserPreviewLayoutBinding? = DataBindingUtil.bind(itemView)
+        private val binding get() = _binding!!
+        private val navController get() = Navigation.findNavController(itemView)
 
         fun bind(user: UserEntity?) {
-            viewBinding.userName.text = user?.username
+
+            binding.user = user!!
+
+            val userIdString = user.userId.toString()
+            ViewCompat.setTransitionName(binding.userAvatar, "avatar_$userIdString")
+            ViewCompat.setTransitionName(binding.userName, "name_$userIdString")
+            binding.root.setOnClickListener {
+                val direction = HomeScreenFragmentDirections.actionHomeFragmentToUserFragment(
+                    userIdString,
+                    user
+                )
+                val extras = FragmentNavigatorExtras(
+                    binding.userAvatar to "avatar_$userIdString",
+                    binding.userName to "name_$userIdString"
+                )
+                navController.navigate(direction, extras)
+            }
         }
     }
 
@@ -46,12 +67,8 @@ class GithubUsersPreviewAdapter(context: Context) :
         parent: ViewGroup,
         viewType: Int
     ): GithubUsersPreviewViewHolder {
-        return GithubUsersPreviewViewHolder(
-            layoutInflater.inflate(
-                R.layout.user_preview_layout,
-                parent,
-                false
-            )
-        )
+
+        val binding = UserPreviewLayoutBinding.inflate(layoutInflater, parent, false)
+        return GithubUsersPreviewViewHolder(binding.root)
     }
 }

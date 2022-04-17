@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="15dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/userAvatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/rounded_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <data>
+        <variable
+            name="user"
+            type="anton.android.domain_api.entities.UserEntity" />
+    </data>
 
-    <TextView
-        android:id="@+id/userName"
-        style="@style/BodyTextTheme"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/username_string"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
-        app:layout_constraintStart_toEndOf="@id/userAvatar"
-        app:layout_constraintTop_toTopOf="@+id/userAvatar" />
+        android:padding="15dp"
+        android:background="?attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/userRepos"
-        style="@style/SmallTextTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/repositories_string"
-        android:textColor="@color/link_blue"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/userName"
-        app:layout_constraintStart_toStartOf="@+id/userName"
-        app:layout_constraintTop_toBottomOf="@+id/userName" />
+        <ImageView
+            android:id="@+id/user_avatar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            app:imageUrl="@{user.avatarUrl}"
+            tools:src="@drawable/rounded_field"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/user_name"
+            style="@style/BodyTextTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            tools:text="@string/username_string"
+            android:text="@{user.username}"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toEndOf="@id/user_avatar"
+            app:layout_constraintTop_toTopOf="@+id/user_avatar" />
+
+        <TextView
+            android:id="@+id/user_profile"
+            style="@style/SmallTextTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_profile_string"
+            android:textColor="@color/link_blue"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/user_name"
+            app:layout_constraintTop_toBottomOf="@+id/user_name"  />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
