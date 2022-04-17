@@ -1,5 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
 class RetrofitPlugin : Plugin<Project> {
@@ -9,8 +10,8 @@ class RetrofitPlugin : Plugin<Project> {
 
             add("implementation", Dependencies.Retrofit.retrofit)
             add("implementation", Dependencies.Retrofit.retrofitGson)
-            add("implementation", Dependencies.Coroutines.coroutines)
+            add("implementation", Dependencies.Paging.paging)
         }
-//        target.apply<MoshiPlugin>()
+        target.apply<CoroutinesPlugin>()
     }
 }

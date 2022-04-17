@@ -13,5 +13,12 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TochkaTest"
+// app
 include(":app")
-include(":di")
+
+// domain
+include(":domain:api")
+
+//data
+include(":data")
+include(":domain:impl")

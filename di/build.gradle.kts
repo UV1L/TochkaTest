@@ -34,6 +34,19 @@ android {
 
 dependencies {
 
+    // domain module
+    implementation(project(":domain:api")) {
+        isTransitive = false
+    }
+    implementation(project(":domain:impl")) {
+        isTransitive = false
+    }
+
+    // data module
+    implementation(project(":data")) {
+        isTransitive = false
+    }
+
     implementation("com.android.support:appcompat-v7:28.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("com.android.support.test:runner:1.0.2")
@@ -41,3 +54,4 @@ dependencies {
 }
 
 apply<DaggerPlugin>()
+apply<RetrofitPlugin>()

@@ -4,7 +4,7 @@
     android:id="@+id/nav_graph_main">
 
     <fragment android:id="@+id/auth_fragment"
-        android:name="anton.android.tochkatest.ui.AuthFragment">
+        android:name="anton.android.tochkatest.ui.auth.AuthFragment">
 
         <action android:id="@+id/auth_fragment_to_home_fragment"
             app:destination="@id/home_fragment"
@@ -13,12 +13,45 @@
     </fragment>
 
     <fragment android:id="@+id/home_fragment"
-        android:name="anton.android.tochkatest.ui.HomeScreenFragment" >
+        android:name="anton.android.tochkatest.ui.home.HomeScreenFragment" >
 
         <action
             android:id="@+id/action_home_fragment_to_auth_fragment"
             app:destination="@id/auth_fragment"
             app:popUpTo="@id/home_fragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_home_fragment_to_user_fragment"
+            app:destination="@id/user_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_home_fragment_to_user_list_fragment"
+            app:destination="@id/user_list_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment android:id="@+id/user_fragment"
+        android:name="anton.android.tochkatest.ui.user.UserFragment">
+
+        <argument android:name="userId"
+            app:argType="string" />
+
+        <argument android:name="user"
+            app:argType="anton.android.domain_api.entities.UserEntity" />
+    </fragment>
+
+    <fragment android:id="@+id/user_list_fragment"
+        android:name="anton.android.tochkatest.ui.user_list.UserListFragment">
+
+        <argument android:name="query"
+            app:argType="string" />
     </fragment>
 </navigation>

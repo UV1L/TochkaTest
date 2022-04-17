@@ -1,59 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="state"
+            type="anton.android.tochkatest.utils.ApplicationState" />
+    </data>
 
     <LinearLayout
+        android:id="@+id/nav_header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorPrimary"
-        android:paddingTop="60dp"
-        android:paddingBottom="50dp"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/navHeaderProfileText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/nav_header_linear"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/profile_string"
-            android:textAlignment="center"
-            android:textColor="?android:textColor"
-            android:textSize="30sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            style="@style/H1TextTheme" />
+            android:background="?colorPrimary"
+            android:gravity="center"
+            android:paddingTop="60dp"
+            android:paddingBottom="50dp">
+
+            <TextView
+                android:id="@+id/nav_header_profile_text"
+                style="@style/BodyTextTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_string"
+                android:textAlignment="center"
+                android:textColor="?android:textColor"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/nav_header_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="12dp"
+                app:imageUrlCircle="@{state.currentUser.photoUrl.toString()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nav_header_username"
+                style="@style/SmallTextTheme"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:clickable="true"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@{state.currentUser.displayName}"
+                android:textAlignment="textStart"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/nav_header_avatar"
+                app:layout_constraintStart_toEndOf="@+id/nav_header_avatar"
+                app:layout_constraintTop_toTopOf="@+id/nav_header_avatar"
+                tools:text="Антон" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/navHeaderAvatar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_launcher"
-            android:tint="?colorPrimaryDark"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/navHeaderProfileText" />
-
-        <TextView
-            android:id="@+id/navHeaderUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Антон"
-            android:textAlignment="center"
-            style="@style/SmallTextTheme"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/navHeaderAvatar"
-            app:layout_constraintStart_toEndOf="@+id/navHeaderAvatar"
-            app:layout_constraintTop_toTopOf="@+id/navHeaderAvatar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</layout>
