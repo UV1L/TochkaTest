@@ -35,13 +35,15 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideTokenInterceptor(
-        @PersonalApiToken token: String
+        @PersonalApiToken token: String,
+        @Username username: String,
     ): Interceptor {
+        val credentials = Credentials.basic(username, token)
         return Interceptor { chain ->
             val request: Request =
                 chain.request()
                     .newBuilder()
-                    .addHeader("Authorization", "Bearer $token")
+                    .addHeader("Authorization", credentials)
                     .build()
 
             chain.proceed(request)
