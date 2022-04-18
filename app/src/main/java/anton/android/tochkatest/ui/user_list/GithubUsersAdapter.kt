@@ -1,4 +1,4 @@
-package anton.android.tochkatest.ui.home
+package anton.android.tochkatest.ui.user_list
 
 import android.content.Context
 import android.content.Intent
@@ -25,6 +25,7 @@ class GithubUsersAdapter(private val context: Context) :
 
             binding.user = user!!
 
+            binding.userName.isSelected = true
             binding.userProfile.setOnClickListener {
                 val reposIntent = Intent(Intent.ACTION_VIEW)
                 reposIntent.data = Uri.parse(user.profileUrl)

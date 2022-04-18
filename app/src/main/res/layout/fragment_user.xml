@@ -40,12 +40,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 tools:text="Username"
+                android:textAlignment="textStart"
                 android:text="@{user.username}"
-                android:layout_margin="25dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginBottom="5dp"
                 style="@style/H1TextTheme"
-                android:maxLines="2"
-                android:ellipsize="end"/>
+                android:maxLines="2" />
         </LinearLayout>
 
         <ImageView

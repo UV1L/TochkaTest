@@ -20,7 +20,7 @@ class GithubRepositoriesAdapter(private val context: Context) :
         RecyclerView.ViewHolder(itemView) {
 
         private val _binding: RepositoryLayoutBinding? = DataBindingUtil.bind(itemView)
-        private val binding get() = _binding!!
+        private val binding get() = _binding!!  
 
         fun bind(repo: RepositoryEntity?) {
 

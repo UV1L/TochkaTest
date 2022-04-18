@@ -31,6 +31,7 @@
             android:layout_margin="10dp"
             android:backgroundTint="@android:color/transparent"
             app:layout_constraintStart_toEndOf="@id/user_list_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/user_list_back_button"
             app:layout_constraintBottom_toBottomOf="@id/user_list_back_button"
             tools:text="Search"

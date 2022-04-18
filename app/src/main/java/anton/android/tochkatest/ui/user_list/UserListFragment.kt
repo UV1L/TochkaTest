@@ -13,7 +13,6 @@ import anton.android.tochkatest.BaseApplication
 import anton.android.tochkatest.databinding.FragmentUserListBinding
 import anton.android.tochkatest.ui.base.BaseSaveableFragment
 import anton.android.tochkatest.ui.base.viewModel
-import anton.android.tochkatest.ui.home.GithubUsersAdapter
 import anton.android.tochkatest.view_model.HomeScreenViewModel
 import anton.android.tochkatest.view_model.base.BaseViewModel
 import kotlinx.coroutines.flow.collectLatest

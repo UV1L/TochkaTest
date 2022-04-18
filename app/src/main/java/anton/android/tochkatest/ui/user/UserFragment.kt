@@ -73,6 +73,7 @@ class UserFragment : BaseSaveableFragment() {
 
         dataBinding.user = args.user
         dataBinding.viewmodel = viewModel
+        dataBinding.userFragmentName.isSelected = true
 
         dataBinding.userFragmentRecycler.adapter = adapter
     }
