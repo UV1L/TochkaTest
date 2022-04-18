@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
@@ -53,11 +54,6 @@ class HomeScreenFragment : BaseSaveableFragment(),
         setupView()
         setupNavigation()
 
-        addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.users
-                .collectLatest(adapter::submitData)
-        }
-
         return dataBinding.root
     }
 
@@ -101,6 +97,15 @@ class HomeScreenFragment : BaseSaveableFragment(),
 
     private fun observeAll() {
 
+        addRepeatingJob(Lifecycle.State.STARTED) {
+            viewModel.users
+                .collectLatest(adapter::submitData)
+        }
+
+        viewModel.query.observe(viewLifecycleOwner) {
+            dataBinding.homeSearchView.setQuery(it, false)
+        }
+
         listOf(
             viewModel.isDialogShown to this::signOut,
             viewModel.isNavShown to this::openMenu,
@@ -133,7 +138,10 @@ class HomeScreenFragment : BaseSaveableFragment(),
         findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToAuthFragment())
 
     private fun setupView() {
+
         dataBinding.homeUsersRecycler.adapter = adapter
+        dataBinding.lifecycleOwner = viewLifecycleOwner
+        dataBinding.viewmodel = viewModel
     }
 
     private fun setupNavigation() {
@@ -153,9 +161,9 @@ class HomeScreenFragment : BaseSaveableFragment(),
         dataBinding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToUserListFragment(
-                    viewModel.stringQuery
-                ))
+                findNavController().navigate(
+                    HomeScreenFragmentDirections.actionHomeFragmentToUserListFragment()
+                )
                 return true
             }
 

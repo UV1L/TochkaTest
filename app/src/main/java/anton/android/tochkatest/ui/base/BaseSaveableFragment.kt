@@ -2,6 +2,7 @@ package anton.android.tochkatest.ui.base
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
@@ -29,7 +30,7 @@ abstract class BaseSaveableFragment : Fragment(),
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : ViewModel> Fragment.viewModel(
     crossinline provider: (SavedStateHandle) -> T
-) = viewModels<T> {
+) = activityViewModels<T> {
     object : AbstractSavedStateViewModelFactory(this, arguments ?: Bundle()) {
         override fun <T : ViewModel?> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T =
             provider(handle) as T

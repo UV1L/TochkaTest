@@ -5,10 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -95,8 +92,7 @@ class HomeScreenViewModel @AssistedInject constructor(
     val areReposReady: LiveData<Boolean> = _areReposReady
 
     private val _query: MutableStateFlow<String> = MutableStateFlow("")
-    val query: StateFlow<String> = _query.asStateFlow()
-    val stringQuery: String get() = query.value
+    val query: LiveData<String> = _query.asLiveData()
 
     val isDialogShown: LiveData<Boolean> = _isDialogShown
     val isNavShown: LiveData<Boolean> = _isNavShown
@@ -104,7 +100,7 @@ class HomeScreenViewModel @AssistedInject constructor(
     val error: LiveData<Boolean> = _error
 
     val users: StateFlow<PagingData<UserEntity>> =
-        query.map(::getPager)
+        _query.map(::getPager)
             .flatMapLatest { it.flow }
             .cachedIn(viewModelScope)
             .stateIn(

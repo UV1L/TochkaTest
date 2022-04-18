@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.navArgs
@@ -14,10 +13,8 @@ import anton.android.tochkatest.BaseApplication
 import anton.android.tochkatest.databinding.FragmentUserBinding
 import anton.android.tochkatest.ui.base.BaseSaveableFragment
 import anton.android.tochkatest.ui.base.viewModel
-import anton.android.tochkatest.ui.home.GithubUsersAdapter
 import anton.android.tochkatest.view_model.HomeScreenViewModel
 import anton.android.tochkatest.view_model.base.BaseViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -49,8 +46,8 @@ class UserFragment : BaseSaveableFragment() {
     ): View {
 
         _dataBinding = FragmentUserBinding.inflate(inflater)
-        setView()
-        observeAll()
+        setupView()
+
         return dataBinding.root
     }
 
@@ -59,6 +56,7 @@ class UserFragment : BaseSaveableFragment() {
 
         ViewCompat.setTransitionName(dataBinding.userFragmentAvatar, "avatar_${args.userId}")
         ViewCompat.setTransitionName(dataBinding.userFragmentName, "name_${args.userId}")
+        observeAll()
     }
 
     override fun onDestroy() {
@@ -71,11 +69,17 @@ class UserFragment : BaseSaveableFragment() {
 
     override fun provideViewModel(): BaseViewModel = viewModel
 
-    private fun setView() {
+    private fun setupView() {
+
         dataBinding.user = args.user
         dataBinding.viewmodel = viewModel
 
         dataBinding.userFragmentRecycler.adapter = adapter
+    }
+
+    private fun observeAll() {
+
+        viewModel.findRepositories(args.user.username)
 
         addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.repos
@@ -92,9 +96,5 @@ class UserFragment : BaseSaveableFragment() {
         viewModel.areReposReady.observe(viewLifecycleOwner) {
             dataBinding.userFragmentProgress.visibility = View.GONE
         }
-    }
-
-    private fun observeAll() {
-        viewModel.findRepositories(args.user.username)
     }
 }

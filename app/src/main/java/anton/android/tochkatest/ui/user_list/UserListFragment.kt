@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import anton.android.tochkatest.BaseApplication
 import anton.android.tochkatest.databinding.FragmentUserListBinding
@@ -19,7 +19,8 @@ import anton.android.tochkatest.view_model.base.BaseViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 
-class UserListFragment : BaseSaveableFragment() {
+class UserListFragment : BaseSaveableFragment(),
+    View.OnClickListener {
 
     private var _dataBinding: FragmentUserListBinding? = null
     private val dataBinding get() = _dataBinding!!
@@ -28,7 +29,6 @@ class UserListFragment : BaseSaveableFragment() {
         (requireActivity().application as BaseApplication).daggerComponent
             .homeScreenViewModelFactory.create(it)
     }
-    private val args: UserListFragmentArgs by navArgs()
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
         GithubUsersAdapter(requireContext())
@@ -41,7 +41,7 @@ class UserListFragment : BaseSaveableFragment() {
     ): View {
 
         _dataBinding = FragmentUserListBinding.inflate(inflater, container, false)
-        setView()
+        setupView()
         setListeners()
 
         return dataBinding.root
@@ -51,9 +51,17 @@ class UserListFragment : BaseSaveableFragment() {
 
     override fun provideViewModel(): BaseViewModel = viewModel
 
-    private fun setView() {
+    override fun onClick(view: View?) {
 
-        viewModel.searchDataChanged(args.query)
+        when (view) {
+            dataBinding.userListBackButton -> goBack()
+        }
+    }
+
+    private fun goBack() = findNavController().popBackStack()
+
+    private fun setupView() {
+
         dataBinding.userListRecycler.adapter = adapter
         dataBinding.userListRecycler.addItemDecoration(
             DividerItemDecoration(
@@ -61,6 +69,9 @@ class UserListFragment : BaseSaveableFragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        dataBinding.lifecycleOwner = viewLifecycleOwner
+        dataBinding.viewmodel = viewModel
+
         addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.users
                 .collectLatest {
@@ -71,8 +82,10 @@ class UserListFragment : BaseSaveableFragment() {
 
     private fun setListeners() {
 
-        dataBinding.userListBackButton.setOnClickListener {
-            findNavController().popBackStack()
+        dataBinding.userListBackButton.setOnClickListener(this)
+        dataBinding.userListSearchEditText.doOnTextChanged { text, start, count, after ->
+
+            viewModel.searchDataChanged(text.toString())
         }
     }
 }

@@ -48,6 +48,10 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
+    dataBinding {
+        addKtx = true
+    }
 }
 
 dependencies {
