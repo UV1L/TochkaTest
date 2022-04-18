@@ -134,8 +134,11 @@ class HomeScreenFragment : BaseSaveableFragment(),
         dataBinding.homeSearchView.isIconified = false
     }
 
-    private fun popBackOnAuthFragmentInclusive() =
+    private fun popBackOnAuthFragmentInclusive() {
+
         findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToAuthFragment())
+        requireActivity().viewModelStore.clear()
+    }
 
     private fun setupView() {
 

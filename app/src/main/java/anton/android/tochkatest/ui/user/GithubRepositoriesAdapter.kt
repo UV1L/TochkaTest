@@ -25,6 +25,7 @@ class GithubRepositoriesAdapter(private val context: Context) :
         fun bind(repo: RepositoryEntity?) {
 
             binding.repo = repo!!
+            binding.repoName.isSelected = true
 
             binding.repoName.setOnClickListener {
                 val reposIntent = Intent(Intent.ACTION_VIEW)
