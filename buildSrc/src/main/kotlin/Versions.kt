@@ -3,7 +3,7 @@ import org.gradle.api.JavaVersion
 object Versions {
 
     const val versionCode = 1
-    const val versionName = "1.0"
+    const val versionName = "1.1"
 
     const val compileSdk = 32
     const val minSdk = 21
