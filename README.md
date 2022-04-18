@@ -2,7 +2,7 @@
  
 Приложение для поиска пользователей на Github
 
-release apk:  [apk 1.1.zip](https://github.com/UV1L/TochkaTest/files/8504100/apk.1.1.zip)
+release apk:  [apk 1.1.zip](https://github.com/UV1L/TochkaTest/files/8504272/apk.1.1.zip)
 
 ver: 1.1
 
@@ -24,6 +24,7 @@ ver: 1.1
 * Coroutines
 * Dagger
 * Retrofit
+* Paging
 * Navigation component
 * Picasso
 * Firebase
@@ -34,7 +35,8 @@ domain модуль пришлось сделать android-library, иначе 
 
 Вынес все зависимости в buildSrc. Опять же излишне, но полезно для обновления версий
 
-#TODO():
+### TODO():
 * Использовать обертку над запросами, чтобы получать sealed классы с ивентами вместо обычного Result
 * Вынести di в отдельный модуль
-* ...
+* Спрятать storePassword и прочее) (не успел нормально сделать)
+* Тесты
