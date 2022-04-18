@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,7 @@ class GithubUsersAdapter(private val context: Context) :
 
         private val _binding: UserLayoutBinding? = DataBindingUtil.bind(itemView)
         private val binding get() = _binding!!
+        private val navController get() = Navigation.findNavController(itemView)
 
         fun bind(user: UserEntity?) {
 
@@ -30,6 +33,12 @@ class GithubUsersAdapter(private val context: Context) :
                 val reposIntent = Intent(Intent.ACTION_VIEW)
                 reposIntent.data = Uri.parse(user.profileUrl)
                 context.startActivity(reposIntent)
+            }
+
+            binding.root.setOnClickListener {
+                navController.navigate(UserListFragmentDirections.actionUserListFragmentToUserFragment(
+                    user.userId.toString(), user
+                ))
             }
         }
     }

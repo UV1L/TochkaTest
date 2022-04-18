@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="repo"
             type="anton.android.domain_api.entities.RepositoryEntity" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        app:cardCornerRadius="20dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        app:cardElevation="2dp">
 
         <TextView
             android:id="@+id/repo_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             style="@style/SmallTextTheme"
             android:textColor="@color/link_blue"
-            tools:text="reponame"
-            android:text="@{repo.name}"/>
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:text="@{repo.name}"
+            tools:text="reponame" />
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -6,27 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.navArgs
+import anton.android.domain_api.use_cases.GithubRepositoriesUseCase
 import anton.android.tochkatest.BaseApplication
 import anton.android.tochkatest.databinding.FragmentUserBinding
-import anton.android.tochkatest.ui.base.BaseSaveableFragment
-import anton.android.tochkatest.ui.base.viewModel
-import anton.android.tochkatest.view_model.HomeScreenViewModel
-import anton.android.tochkatest.view_model.base.BaseViewModel
+import anton.android.tochkatest.view_model.UserViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UserFragment : BaseSaveableFragment() {
+class UserFragment : Fragment() {
 
     private var _dataBinding: FragmentUserBinding? = null
     private val dataBinding get() = _dataBinding!!
     private val args: UserFragmentArgs by navArgs()
 
-    private val viewModel: HomeScreenViewModel by viewModel {
+    private val viewModel: UserViewModel by viewModels {
         (requireActivity().application as BaseApplication).daggerComponent
-            .homeScreenViewModelFactory.create(it)
+            .viewModelsFactory()
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
@@ -36,7 +39,9 @@ class UserFragment : BaseSaveableFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = TransitionInflater
+            .from(context)
+            .inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(
@@ -65,15 +70,12 @@ class UserFragment : BaseSaveableFragment() {
         _dataBinding = null
     }
 
-    override fun saveState(): Bundle = Bundle()
-
-    override fun provideViewModel(): BaseViewModel = viewModel
-
     private fun setupView() {
 
         dataBinding.user = args.user
         dataBinding.viewmodel = viewModel
         dataBinding.userFragmentName.isSelected = true
+        viewModel.setLoading()
 
         dataBinding.userFragmentRecycler.adapter = adapter
     }
@@ -89,13 +91,20 @@ class UserFragment : BaseSaveableFragment() {
                         launch {
                             adapter.submitList(it)
                         }
-                        viewModel.setReposReady()
+                        viewModel.setLoaded()
                     }
                 }
         }
 
-        viewModel.areReposReady.observe(viewLifecycleOwner) {
-            dataBinding.userFragmentProgress.visibility = View.GONE
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+
+            with(dataBinding.userFragmentProgress) {
+                this.visibility = if (loading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            }
         }
     }
 }

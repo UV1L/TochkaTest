@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:animateLayoutChanges="true">
 
         <ImageView
             android:id="@+id/user_avatar"

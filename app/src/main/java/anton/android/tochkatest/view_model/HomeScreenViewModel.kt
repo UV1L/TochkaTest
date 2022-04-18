@@ -34,7 +34,6 @@ import javax.inject.Singleton
 class HomeScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     private val githubUsersUseCase: GithubUsersUseCase,
-    private val githubRepositoriesUseCase: GithubRepositoriesUseCase,
 ) : BaseViewModel(savedStateHandle) {
 
     @AssistedFactory
@@ -82,22 +81,12 @@ class HomeScreenViewModel @AssistedInject constructor(
     private val _isSignedOut: MutableLiveData<Boolean> =
         savedStateHandle.getLiveData<Boolean?>(IS_SIGNED_OUT).apply { value = false }
 
-    private val _error: MutableLiveData<Boolean> =
-        savedStateHandle.getLiveData<Boolean?>(IS_ERROR).apply { value = false }
-
-    private val _repos: MutableStateFlow<List<RepositoryEntity>?> = MutableStateFlow(null)
-    val repos = _repos.asStateFlow()
-
-    private val _areReposReady: MutableLiveData<Boolean> = MutableLiveData()
-    val areReposReady: LiveData<Boolean> = _areReposReady
-
     private val _query: MutableStateFlow<String> = MutableStateFlow("")
     val query: LiveData<String> = _query.asLiveData()
 
     val isDialogShown: LiveData<Boolean> = _isDialogShown
     val isNavShown: LiveData<Boolean> = _isNavShown
     val isSignedOut: LiveData<Boolean> = _isSignedOut
-    val error: LiveData<Boolean> = _error
 
     val users: StateFlow<PagingData<UserEntity>> =
         _query.map(::getPager)
@@ -136,30 +125,8 @@ class HomeScreenViewModel @AssistedInject constructor(
         }
     }
 
-    fun findRepositories(username: String) {
-
-        viewModelScope.launch {
-            githubRepositoriesUseCase.invoke(username)
-                .onEach { it.sortReposResult() }
-                .collect()
-        }
-    }
-
-    fun setReposReady() {
-        _areReposReady.postValue(true)
-    }
-
     private fun getPager(username: String): Pager<Int, UserEntity> {
         return githubUsersUseCase.invoke(username)
-    }
-
-    private fun Result<List<RepositoryEntity>>.sortReposResult() {
-
-        this.onSuccess {
-            _repos.tryEmit(it)
-        }.onFailure {
-            _error.postValue(true)
-        }
     }
 
     private fun Bundle.changeStateFor(vararg tags: String) {
